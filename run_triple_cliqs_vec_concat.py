@@ -1,7 +1,7 @@
 import sys
 from collections import Counter, namedtuple, defaultdict
 import itertools
-
+import random
 import cliqs.depgraph as depgraph
 import cliqs.corpora
 import numpy as np
@@ -359,7 +359,7 @@ class TripleClassifier:
                 inputv2 = torch.tensor(self.data.test[i][1])
                 inputv3 = torch.tensor(self.data.test[i][2])
                 output = self.classifier(inputv1, inputv2, inputv3)
-                correct.append(int((output[0] > output[1]) ==  self.data.test_labels[i]))
+                correct.append(int((output[0] < output[1]) ==  self.data.test_labels[i]))
         return correct
 
     def do_test_using_lemma_embeddings(self, word_or_lemma="word"):
@@ -399,13 +399,14 @@ class TripleClassifier:
                     obj_inputv = torch.empty(BERT_DIM)
                     nn.init.normal_(obj_inputv)
                 
-                # TODO: put in order vector
-                order_vec = SUBJ
-                #order_vec = data.encoder.
+                if triple.order in ["svo", "sov", "vso"]:
+                    order_vec = SUBJ
+                else:
+                    order_vec = NOTSUBJ
                 
                 # DO CLASSIFICATION
                 output = self.classifier(subj_inputv.to('cuda'), obj_inputv.to('cuda'), order_vec.to('cuda'))
-                correct.append(int(output[0] > output[1]))
+                correct.append(int(output[0] < output[1]))
 
         return correct
 
@@ -439,14 +440,14 @@ if __name__ == "__main__":
         & set(cliqs.corpora.all_ud_train_corpora)
     )
 
-    print(all_corpora, "ALL")
+    print(curlang, all_corpora, "ALL")
 
     # Load Data
     test_triples = {
         lang: extract_triples_from_corpus(cliqs.corpora.all_ud_test_corpora[lang])
         # if "Turkish" in lang #and "UD_Romanian-RRT" not in lang)
-        #for lang in all_corpora if curlang in lang
-        for lang in all_corpora if "UD_German-GSD" in lang
+        for lang in all_corpora if curlang in lang
+        # for lang in all_corpora if "UD_German-GSD" in lang
     }
 
 
@@ -485,6 +486,6 @@ if __name__ == "__main__":
     print(order_data)
     print(no_order_data)
 
-    #pickle.dump(order_data, open("data/order/" + curlang, "wb"))
+    pickle.dump(order_data, open("data2/order/" + curlang, "wb"))
 
-    #pickle.dump(no_order_data, open("data/no_order/" + curlang, "wb"))
+    pickle.dump(no_order_data, open("data2/no_order/" + curlang, "wb"))
