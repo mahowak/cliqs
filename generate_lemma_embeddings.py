@@ -11,6 +11,7 @@ For words with no known lemma, output has a zeros vector.
 
 """
 import io
+import os
 import sys
 import gzip
 import random
@@ -34,8 +35,10 @@ def load_vectors(lines):
     for line in lines:
         word, *numbers = line.rstrip().split(' ')
         assert len(numbers) == d
-        data[word] = np.array(list(map(float, numbers)))
-    assert len(data) == n
+        if len(numbers) == d:
+            data[word] = np.array(list(map(float, numbers)))
+    print("vec length:", len(data),  file=sys.stderr)
+    #assert len(data) == n
     return data
 
 def load_lemmas(lines):
@@ -55,14 +58,17 @@ def load_lemmas(lines):
             lemma2word[lemma].append(word)
         else:
             lemma2word[lemma] = [word]
+    print("lemma length:", len(lemma2word), file=sys.stderr)
+    print("word2lemma length:", len(word2lemma),  file=sys.stderr)
+
     return word2lemma, lemma2word
 
 def lemma_averages(vectors, l2w):
     d = {}
     for lemma, words in l2w.items():
         vs = [vectors[word] for word in words if word in vectors]
-        average = np.mean(vs, axis=0)
-        d[lemma] = average
+        if len(vs) > 0:
+            d[lemma] = np.mean(vs, axis=0)
     return d
 
 def get_lemma(w2l, word):
@@ -91,6 +97,11 @@ def print_word2vec(d):
         print(w, end=" ")
         number_strs = ["%.4f" % v_i for v_i in v]
         print(" ".join(number_strs), end="\n")
+
+def get_vectors(x):
+    with myopen(x, mode='rt') as infile:
+        vectors = load_vectors(infile)
+    return vectors
     
 def main(vec_filename, lemmas_filename):
     print("Loading vectors from: %s" % vec_filename, file=sys.stderr)
