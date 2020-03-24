@@ -187,7 +187,7 @@ class TripleClassifier:
         self.data = data
         self.do_train(num_epochs, **kwds)
 
-    def do_train(self, num_epochs=200, verbose=False, early_stopping=False, **kwds):
+    def do_train(self, num_epochs=200, verbose=True, early_stopping=False, **kwds):
         nlabel = 2
         train_triples = self.data.train_triple_vectors
         num_inputs = train_triples[0].subj_vector.shape[0]
@@ -203,7 +203,7 @@ class TripleClassifier:
             for i, sample in enumerate(train_triples):
                 inputv1 = torch.tensor(sample.random_so_vectors[0]).unsqueeze(0).to("cuda")
                 inputv2 = torch.tensor(sample.random_so_vectors[1]).unsqueeze(0).to("cuda")
-                inputv3 = torch.tensor(sample.s_first).unsqueeze(0).to("cuda")
+                inputv3 = sample.s_first.clone().detach().unsqueeze(0).to("cuda")
                 labelsv = torch.tensor([sample.label])
                 output = self.classifier(inputv1.float(), inputv2.float(), inputv3.float())
                 loss = criterion(output.unsqueeze(0),  labelsv.to("cuda"))
@@ -211,11 +211,10 @@ class TripleClassifier:
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
-                if verbose:
-                    losses.append(loss.data.mean())
-            if verbose:
-                print('[%d/%d] Train Loss: %.3f' %
-                      (epoch+1, num_epochs, np.mean(losses)), file=sys.stderr)
+            #   if verbose:
+            #        losses.append(loss.data.mean())
+            #print('[%d/%d] Train Loss: %.3f' %
+            #          (epoch+1, num_epochs, np.mean(losses)), file=sys.stderr)
 
     def predict_test_set(self):
         # work on subj/obj dyads
@@ -226,7 +225,7 @@ class TripleClassifier:
                     sample.random_so_vectors[0]).unsqueeze(0).to("cuda")
                 inputv2 = torch.tensor(
                     sample.random_so_vectors[1]).unsqueeze(0).to("cuda")
-                inputv3 = torch.tensor(sample.s_first).unsqueeze(0).to("cuda")
+                inputv3 = sample.s_first.clone().detach().unsqueeze(0).to("cuda")
                 output = self.classifier(inputv1.float(), inputv2.float(), inputv3.float())
                 correct.append(int((output[0] < output[1]) ==  sample.label))
         return correct
@@ -270,7 +269,7 @@ if __name__ == "__main__":
         & set(cliqs.corpora.all_ud_train_corpora)
     )
 
-    print(curlang, all_corpora, "ALL")
+    #print(curlang, all_corpora, "ALL")
 
     assert curlang in all_corpora
 
