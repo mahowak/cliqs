@@ -1,61 +1,61 @@
-python run_triple_cliqs_vec.py UD_Bulgarian-BTB word
-python run_triple_cliqs_vec.py UD_Danish-DDT word
-python run_triple_cliqs_vec.py UD_Wolof-WTB word
-python run_triple_cliqs_vec.py UD_Arabic-NYUAD word
-python run_triple_cliqs_vec.py UD_Basque-BDT word
-python run_triple_cliqs_vec.py UD_Finnish-FTB word
-python run_triple_cliqs_vec.py UD_Czech-FicTree word
-python run_triple_cliqs_vec.py UD_Classical_Chinese-Kyoto word
-python run_triple_cliqs_vec.py UD_English-LinES word
-python run_triple_cliqs_vec.py UD_Korean-GSD word
-python run_triple_cliqs_vec.py UD_Uyghur-UDT word
-python run_triple_cliqs_vec.py UD_Norwegian-Nynorsk word
-python run_triple_cliqs_vec.py UD_Catalan-AnCora word
-python run_triple_cliqs_vec.py UD_Latvian-LVTB word
-python run_triple_cliqs_vec.py UD_Slovak-SNK word
-python run_triple_cliqs_vec.py UD_Galician-CTG word
-python run_triple_cliqs_vec.py UD_Serbian-SET word
-python run_triple_cliqs_vec.py UD_Chinese-GSDSimp word
-python run_triple_cliqs_vec.py UD_Afrikaans-AfriBooms word
-python run_triple_cliqs_vec.py UD_Russian-SynTagRus word
-python run_triple_cliqs_vec.py UD_Estonian-EDT word
-python run_triple_cliqs_vec.py UD_Romanian-RRT word
-python run_triple_cliqs_vec.py UD_Norwegian-Bokmaal word
-python run_triple_cliqs_vec.py UD_French-Spoken word
-python run_triple_cliqs_vec.py UD_Ancient_Greek-PROIEL word
-python run_triple_cliqs_vec.py UD_German-GSD word
-python run_triple_cliqs_vec.py UD_German-HDT word
-python run_triple_cliqs_vec.py UD_Urdu-UDTB word
-python run_triple_cliqs_vec.py UD_Finnish-TDT word
-python run_triple_cliqs_vec.py UD_Chinese-GSD word
-python run_triple_cliqs_vec.py UD_Polish-PDB word
-python run_triple_cliqs_vec.py UD_Polish-LFG word
-python run_triple_cliqs_vec.py UD_Latin-ITTB word
-python run_triple_cliqs_vec.py UD_Portuguese-Bosque word
-python run_triple_cliqs_vec.py UD_Norwegian-NynorskLIA word
-python run_triple_cliqs_vec.py UD_English-ESL word
-python run_triple_cliqs_vec.py UD_Greek-GDT word
-python run_triple_cliqs_vec.py UD_Spanish-AnCora word
-python run_triple_cliqs_vec.py UD_Slovenian-SSJ word
-python run_triple_cliqs_vec.py UD_Coptic-Scriptorium word
-python run_triple_cliqs_vec.py UD_Arabic-PADT word
-python run_triple_cliqs_vec.py UD_Vietnamese-VTB word
-python run_triple_cliqs_vec.py UD_Latin-PROIEL word
-python run_triple_cliqs_vec.py UD_Dutch-Alpino word
-python run_triple_cliqs_vec.py UD_Portuguese-GSD word
-python run_triple_cliqs_vec.py UD_French-FTB word
-python run_triple_cliqs_vec.py UD_Swedish-LinES word
-python run_triple_cliqs_vec.py UD_Japanese-BCCWJ word
-python run_triple_cliqs_vec.py UD_Ancient_Greek-Perseus word
-python run_triple_cliqs_vec.py UD_English-GUM word
-python run_triple_cliqs_vec.py UD_Romanian-Nonstandard word
-python run_triple_cliqs_vec.py UD_Ukrainian-IU word
-python run_triple_cliqs_vec.py UD_English-EWT word
-python run_triple_cliqs_vec.py UD_Hindi-HDTB word
-python run_triple_cliqs_vec.py UD_Old_French-SRCMF word
-python run_triple_cliqs_vec.py UD_Croatian-SET word
-python run_triple_cliqs_vec.py UD_Swedish-Talbanken word
-python run_triple_cliqs_vec.py UD_Italian-VIT word
-python run_triple_cliqs_vec.py UD_Czech-PDT word
-python run_triple_cliqs_vec.py UD_Hungarian-Szeged word
-python run_triple_cliqs_vec.py UD_Indonesian-GSD word
+python run_triple_cliqs_vec.py UD_Bulgarian-BTB word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Danish-DDT word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Wolof-WTB word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Arabic-NYUAD word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Basque-BDT word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Finnish-FTB word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Czech-FicTree word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Classical_Chinese-Kyoto word $1 $2 $3
+python run_triple_cliqs_vec.py UD_English-LinES word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Korean-GSD word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Uyghur-UDT word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Norwegian-Nynorsk word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Catalan-AnCora word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Latvian-LVTB word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Slovak-SNK word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Galician-CTG word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Serbian-SET word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Chinese-GSDSimp word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Afrikaans-AfriBooms word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Russian-SynTagRus word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Estonian-EDT word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Romanian-RRT word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Norwegian-Bokmaal word $1 $2 $3
+python run_triple_cliqs_vec.py UD_French-Spoken word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Ancient_Greek-PROIEL word $1 $2 $3
+python run_triple_cliqs_vec.py UD_German-GSD word $1 $2 $3
+python run_triple_cliqs_vec.py UD_German-HDT word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Urdu-UDTB word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Finnish-TDT word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Chinese-GSD word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Polish-PDB word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Polish-LFG word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Latin-ITTB word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Portuguese-Bosque word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Norwegian-NynorskLIA word $1 $2 $3
+python run_triple_cliqs_vec.py UD_English-ESL word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Greek-GDT word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Spanish-AnCora word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Slovenian-SSJ word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Coptic-Scriptorium word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Arabic-PADT word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Vietnamese-VTB word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Latin-PROIEL word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Dutch-Alpino word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Portuguese-GSD word $1 $2 $3
+python run_triple_cliqs_vec.py UD_French-FTB word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Swedish-LinES word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Japanese-BCCWJ word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Ancient_Greek-Perseus word $1 $2 $3
+python run_triple_cliqs_vec.py UD_English-GUM word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Romanian-Nonstandard word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Ukrainian-IU word $1 $2 $3
+python run_triple_cliqs_vec.py UD_English-EWT word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Hindi-HDTB word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Old_French-SRCMF word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Croatian-SET word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Swedish-Talbanken word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Italian-VIT word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Czech-PDT word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Hungarian-Szeged word $1 $2 $3
+python run_triple_cliqs_vec.py UD_Indonesian-GSD word $1 $2 $3

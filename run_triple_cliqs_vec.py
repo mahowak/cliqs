@@ -1,5 +1,5 @@
 import sys
-from collections import Counter, namedtuple, defaultdict
+from collections import Counter, namedtuple, defaultdict, OrderedDict
 import itertools
 import random
 import cliqs.depgraph as depgraph
@@ -24,10 +24,10 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 flat = itertools.chain.from_iterable
 
 VEC_DIM = 300
-SUBJ = torch.empty(64).to('cuda')
-nn.init.normal_(SUBJ)
-NOTSUBJ = torch.empty(64).to('cuda')
-nn.init.normal_(NOTSUBJ)
+#SUBJ = torch.empty(64).to('cuda')
+#nn.init.normal_(SUBJ)
+#NOTSUBJ = torch.empty(64).to('cuda')
+#nn.init.normal_(NOTSUBJ)
 UNK = np.random.rand(VEC_DIM)
 
 def aggregate_by_key(f, xs):
@@ -96,7 +96,7 @@ def extract_triples_from_corpus(corpus, **kwds):
     return list(flat(map(extract_triples_from_sentence, corpus.sentences(**kwds))))
 
 
-class VectorEnconding:
+class VectorEncoding:
     def __init__(self, triples, vectors, word_or_lemma="word"):
         self.vectors = vectors
         self.triples = triples
@@ -147,13 +147,14 @@ class VectorEnconding:
         return vector_triples
 
 class _classifier(nn.Module):
-    def __init__(self, num_in, num_out):
+    def __init__(self, num_in, num_out, num_hidden_1=64, num_hidden_2=16):
+        print(num_hidden_1, num_hidden_2, file=sys.stderr)
         super(_classifier, self).__init__()
-        self.hidden = nn.Linear(num_in, 64)
+        self.hidden = nn.Linear(num_in, num_hidden_1)
         self.hidden_relu = nn.ReLU()
-        self.hidden2 = nn.Linear(64 * 3, 16)
+        self.hidden2 = nn.Linear(num_hidden_1 * 3, num_hidden_2)
         self.hidden3 = nn.ReLU()
-        self.hidden4 = nn.Linear(16, num_out)
+        self.hidden4 = nn.Linear(num_hidden_2, num_out)
 
     def forward(self, input1, input2, order_vec):
         x1 = self.hidden(input1)
@@ -187,11 +188,11 @@ class TripleClassifier:
         self.data = data
         self.do_train(num_epochs, **kwds)
 
-    def do_train(self, num_epochs=200, verbose=True, early_stopping=False, **kwds):
+    def do_train(self, num_epochs=200, verbose=True, early_stopping=False, num_hidden_1=64, num_hidden_2=16, **kwds):
         nlabel = 2
         train_triples = self.data.train_triple_vectors
         num_inputs = train_triples[0].subj_vector.shape[0]
-        self.classifier = _classifier(num_inputs, nlabel).cuda()
+        self.classifier = _classifier(num_inputs, nlabel, num_hidden_1=num_hidden_1, num_hidden_2=num_hidden_2).cuda()
 
         optimizer = optim.Adam(self.classifier.parameters(), **kwds)
         criterion = nn.CrossEntropyLoss()
@@ -235,15 +236,15 @@ def get_data(lang, vectors, word_or_lemma, include_order):
     d[lang] = TrainDevTestData(train_triples[lang],
                                    dev_triples[lang],
                                    test_triples[lang],
-                                   VectorEnconding,
+                                   VectorEncoding,
                                    vectors, 
                                    word_or_lemma,
                                    include_order=include_order)
     return d        
 
 
-def accuracy(data):
-    classifier = TripleClassifier(data)
+def accuracy(data, **hypers):
+    classifier = TripleClassifier(data, **hypers)
     token_acc = np.mean(classifier.predict_test_set())
     return (token_acc)
 
@@ -256,10 +257,25 @@ if __name__ == "__main__":
     assert word_or_lemma in ["word", "lemma"]
     if word_or_lemma == "word":
         code = "wiki.{}.align.vec".format(df.loc[curlang]["wiki"])
-        path = os.path.join("/u/scr/kylemaho/wikivecs/", code)
+        path = os.path.join("/home/canjo/data/wikivecs/", code)
     else:
         code = df.loc[curlang]["iso"]
-        path = os.path.join("/u/scr/kylemaho/wikivec_lemmas/", code) 
+        path = os.path.join("/home/canjo/data/wikivec_lemmas/", code)
+
+    hypers = OrderedDict([
+        ('num_hidden_1', int(sys.argv[3])),
+        ('num_hidden_2', int(sys.argv[4])),
+        ('lr', float(sys.argv[5])),
+    ])    
+
+    hypers_str = "_".join(map(str, hypers.values()))
+
+    global SUBJ
+    global NOTSUBJ
+    SUBJ = torch.empty(hypers['num_hidden_1']).to('cuda')
+    nn.init.normal_(SUBJ)
+    NOTSUBJ = torch.empty(hypers['num_hidden_1']).to('cuda')
+    nn.init.normal_(NOTSUBJ)            
 
     vectors = {curlang: get_vectors(path)}
 
@@ -268,6 +284,7 @@ if __name__ == "__main__":
         & set(cliqs.corpora.all_ud_test_corpora)
         & set(cliqs.corpora.all_ud_train_corpora)
     )
+
 
     #print(curlang, all_corpora, "ALL")
 
@@ -286,7 +303,7 @@ if __name__ == "__main__":
     SIZE_LIMIT = CUTOFF * 8
     good_langs = {lang for lang in test_triples if len(
         test_triples[lang]) >= CUTOFF}
-    print(good_langs)
+    print(good_langs, file=sys.stderr)
 
     assert curlang in good_langs
 
@@ -303,16 +320,22 @@ if __name__ == "__main__":
     d_without_order = get_data(curlang, vectors[curlang], word_or_lemma, False)
 
     order_data = {
-        (curlang, "order"): accuracy(d_with_order[curlang])
+        (curlang, "order"): accuracy(d_with_order[curlang], **hypers)
     }
 
     no_order_data = {
-        (curlang, "no_order"): accuracy(d_without_order[curlang]) 
+        (curlang, "no_order"): accuracy(d_without_order[curlang], **hypers) 
     }
 
-    print(order_data)
-    print(no_order_data)
+    # output format: {('UD_Bulgarian-BTB', 'order'): 0.8679775280898876}
 
-    pickle.dump(order_data, open("data_vecs/order/" + curlang + "_" + word_or_lemma, "wb"))
+    print(order_data, file=sys.stderr)
+    print(no_order_data, file=sys.stderr)
 
-    pickle.dump(no_order_data, open("data_vecs/no_order/" + curlang + "_" + word_or_lemma, "wb"))
+    for data in [order_data, no_order_data]:
+        for key, value in data.items():
+            print(",".join(list(map(str, key)) + list(map(str, hypers.values())) + [str(value)]))
+
+    #pickle.dump(order_data, open("data_vecs/order/" + curlang + "_" + word_or_lemma + "_" + hypers_str, "wb"))
+
+    #pickle.dump(no_order_data, open("data_vecs/no_order/" + curlang + "_" + word_or_lemma + "_" + hypers_str, "wb"))
